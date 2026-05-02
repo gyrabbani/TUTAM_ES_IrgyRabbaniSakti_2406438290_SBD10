@@ -1,22 +1,26 @@
 const pool = require('../config/db');
 
-// READ: ambil semua notes (diurutkan dari yang terbaru)
 const getNotes = async (req, res) => {
+  const { userId } = req.query; 
+  
   try {
-    const result = await pool.query('SELECT * FROM notes ORDER BY created_at DESC');
+    const result = await pool.query(
+      'SELECT * FROM notes WHERE user_id = $1 ORDER BY created_at DESC', 
+      [userId]
+    );
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// CREATE: bikin note baru
 const createNote = async (req, res) => {
-  const { title, content, color } = req.body;
+  const { title, content, color, userId } = req.body;
+  
   try {
     const result = await pool.query(
-      'INSERT INTO notes (title, content, color) VALUES ($1, $2, $3) RETURNING *',
-      [title, content, color]
+      'INSERT INTO notes (title, content, color, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
+      [title, content, color, userId]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
