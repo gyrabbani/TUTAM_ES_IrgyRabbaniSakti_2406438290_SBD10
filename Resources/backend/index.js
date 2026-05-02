@@ -14,6 +14,10 @@ app.use(express.json()); // baca request format JSON
 const noteRoutes = require('./routes/noteRoutes');
 app.use('/api/notes', noteRoutes);
 
+// manggil authRoutes
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
 // test route sederhana
 app.get('/', (req, res) => {
   res.send('Backend Coretan berjalan');
