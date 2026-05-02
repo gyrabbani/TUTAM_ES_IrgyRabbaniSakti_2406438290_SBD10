@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 font-sans">
-      {/* Card Container */}
+      {/* card container */}
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         
-        {/* Header */}
+        {/* header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
           <p className="mt-2 text-sm text-slate-500">
@@ -14,9 +14,9 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Form */}
+        {/* form */}
         <form className="space-y-6">
-          {/* Email / Username Input */}
+          {/* email / username input */}
           <div>
             <label 
               htmlFor="identifier" 
@@ -34,7 +34,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password Input */}
+          {/* password input */}
           <div>
             <label 
               htmlFor="password" 
@@ -52,7 +52,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Submit Button */}
+          {/* submit button */}
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
@@ -61,7 +61,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Register Link */}
+        {/* register link */}
         <p className="mt-6 text-center text-sm text-slate-600">
           Don't have an account?{" "}
           <Link 

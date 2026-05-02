@@ -13,7 +13,7 @@ const COLORS = [
 export default function NotesPage() {
   const [notes, setNotes] = useState<any[]>([]);
   
-  // State untuk Modal & Form
+  // state untuk modal & form
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -22,10 +22,10 @@ export default function NotesPage() {
     color: "bg-amber-100"
   });
 
-  // URL Backend Express
-  const API_URL = "http://localhost:5000/api/notes";
+  // URL backend express
+  const API_URL = "https://tutam-es-irgy-rabbani-sakti-2406438.vercel.app/api/notes";
 
-  // --- 1. FETCH DATA DARI BACKEND (READ) ---
+  // fetch data dari backend (READ)
   const fetchNotes = async () => {
     try {
       const response = await fetch(API_URL);
@@ -36,25 +36,24 @@ export default function NotesPage() {
     }
   };
 
-  // Jalankan fetchNotes saat halaman pertama kali dibuka
+  // jalankan fetchNotes saat halaman pertama kali dibuka
   useEffect(() => {
     fetchNotes();
   }, []);
 
-  // --- 2. LOGIKA DELETE ---
+  // DELETE
   const handleDelete = async (id: number) => {
     try {
       await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
       });
-      // Hapus note dari tampilan layar tanpa perlu refresh
       setNotes(notes.filter(note => note.id !== id));
     } catch (error) {
       console.error("Gagal menghapus note:", error);
     }
   };
 
-  // --- LOGIKA OPEN MODAL ---
+  // logika open model
   const openModal = (note?: any) => {
     if (note) {
       setEditingId(note.id);
@@ -66,13 +65,13 @@ export default function NotesPage() {
     setIsModalOpen(true);
   };
 
-  // --- 3. LOGIKA SUBMIT FORM (CREATE & UPDATE) ---
+  // logika submit form (CREATE dan UPDATE)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
       if (editingId) {
-        // Update (PUT)
+        // update (PUT)
         const response = await fetch(`${API_URL}/${editingId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -80,10 +79,10 @@ export default function NotesPage() {
         });
         const updatedNote = await response.json();
         
-        // Update tampilan
+        // update tampilan
         setNotes(notes.map(note => note.id === editingId ? updatedNote : note));
       } else {
-        // Create (POST)
+        // create (POST)
         const response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -91,7 +90,6 @@ export default function NotesPage() {
         });
         const newNote = await response.json();
         
-        // Tambahkan note baru ke tampilan atas
         setNotes([newNote, ...notes]);
       }
       
@@ -101,7 +99,7 @@ export default function NotesPage() {
     }
   };
 
-  // Format tanggal dari PostgreSQL
+  // format tanggal dari postgreSQL
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -112,7 +110,7 @@ export default function NotesPage() {
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 relative">
       
-      {/* Sidebar */}
+      {/* sidebar */}
       <aside className="w-20 sm:w-24 bg-white border-r border-slate-200 flex flex-col items-center py-8 fixed h-full z-10">
         <div className="font-extrabold text-xl mb-12 tracking-tight text-slate-800">
           Coretan
@@ -127,7 +125,7 @@ export default function NotesPage() {
         </button>
       </aside>
 
-      {/* Main Content Area */}
+      {/* main content */}
       <main className="flex-1 ml-20 sm:ml-24 p-8 sm:p-12">
         <header className="flex justify-between items-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-800">
@@ -141,7 +139,7 @@ export default function NotesPage() {
           </Link>
         </header>
 
-        {/* Notes Grid */}
+        {/* note grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {notes.map((note) => (
             <div 
@@ -188,7 +186,7 @@ export default function NotesPage() {
         </div>
       </main>
 
-      {/* --- MODAL FORM --- */}
+      {/* modal form */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">

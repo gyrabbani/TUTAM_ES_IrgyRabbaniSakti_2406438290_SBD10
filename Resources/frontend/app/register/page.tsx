@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function RegisterPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 font-sans py-10">
-      {/* Card Container */}
+      {/* card container */}
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
         
-        {/* Header */}
+        {/* header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-slate-900">Create an Account</h1>
           <p className="mt-2 text-sm text-slate-500">
@@ -14,9 +14,9 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Form */}
+        {/* form */}
         <form className="space-y-5">
-          {/* Full Name Input */}
+          {/* full name input*/}
           <div>
             <label 
               htmlFor="fullName" 
@@ -34,7 +34,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Username Input */}
+          {/* uname input */}
           <div>
             <label 
               htmlFor="username" 
@@ -52,7 +52,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Email Input */}
+          {/* email input */}
           <div>
             <label 
               htmlFor="email" 
@@ -70,7 +70,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Password Input */}
+          {/* password input */}
           <div>
             <label 
               htmlFor="password" 
@@ -88,7 +88,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Submit Button */}
+          {/* submit button */}
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 mt-2"
@@ -97,7 +97,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        {/* Login Link */}
+        {/* login link */}
         <p className="mt-6 text-center text-sm text-slate-600">
           Already have an account?{" "}
           <Link 
