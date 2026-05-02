@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const COLORS = [
   { name: "Blue", class: "bg-blue-100" },
@@ -11,8 +11,10 @@ const COLORS = [
 ];
 
 export default function NotesPage() {
+  const router = useRouter();
   const [notes, setNotes] = useState<any[]>([]);
-  
+  const [userName, setUserName] = useState("");
+
   // state untuk modal & form
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -36,10 +38,25 @@ export default function NotesPage() {
     }
   };
 
-  // jalankan fetchNotes saat halaman pertama kali dibuka
+  // jalankan fetchNotes dan cek login saat halaman pertama kali dibuka
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      const firstName = user.fullName ? user.fullName.split(" ")[0] : user.username;
+      setUserName(firstName);
+    } else {
+      router.push("/login");
+    }
+
     fetchNotes();
-  }, []);
+  }, [router]);
+
+  // LOGOUT (Hapus sesi dari localStorage)
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
 
   // DELETE
   const handleDelete = async (id: number) => {
@@ -68,7 +85,7 @@ export default function NotesPage() {
   // logika submit form (CREATE dan UPDATE)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+         
     try {
       if (editingId) {
         // update (PUT)
@@ -78,7 +95,7 @@ export default function NotesPage() {
           body: JSON.stringify(formData),
         });
         const updatedNote = await response.json();
-        
+                 
         // update tampilan
         setNotes(notes.map(note => note.id === editingId ? updatedNote : note));
       } else {
@@ -89,10 +106,10 @@ export default function NotesPage() {
           body: JSON.stringify(formData),
         });
         const newNote = await response.json();
-        
+                 
         setNotes([newNote, ...notes]);
       }
-      
+             
       setIsModalOpen(false);
     } catch (error) {
       console.error("Gagal menyimpan note:", error);
@@ -109,13 +126,13 @@ export default function NotesPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 relative">
-      
+             
       {/* sidebar */}
       <aside className="w-20 sm:w-24 bg-white border-r border-slate-200 flex flex-col items-center py-8 fixed h-full z-10">
         <div className="font-extrabold text-xl mb-12 tracking-tight text-slate-800">
           Coretan
         </div>
-        
+                 
         <button 
           onClick={() => openModal()}
           title="Add new note"
@@ -129,14 +146,15 @@ export default function NotesPage() {
       <main className="flex-1 ml-20 sm:ml-24 p-8 sm:p-12">
         <header className="flex justify-between items-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-800">
-            Hello, Irgy 👋
+            Hello, {userName} 👋
           </h1>
-          <Link 
-            href="/login"
+          {/* Link diubah jadi button agar fungsi handleLogout bisa berjalan */}
+          <button 
+            onClick={handleLogout}
             className="px-5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-sm"
           >
             Logout
-          </Link>
+          </button>
         </header>
 
         {/* note grid */}
@@ -159,7 +177,7 @@ export default function NotesPage() {
                 <span className="text-xs text-slate-600 font-medium">
                   {formatDate(note.created_at)}
                 </span>
-                
+                                 
                 <div className="flex gap-2">
                   <button 
                     onClick={() => openModal(note)}
@@ -177,10 +195,10 @@ export default function NotesPage() {
               </div>
             </div>
           ))}
-          
+                     
           {notes.length === 0 && (
             <div className="col-span-full text-center text-slate-500 mt-10">
-              Notes masih kosong nih. Klik tombol + untuk buat note baru!
+              Notes masih kosong. Klik tombol + untuk buat note baru
             </div>
           )}
         </div>
@@ -193,7 +211,7 @@ export default function NotesPage() {
             <h2 className="text-2xl font-bold mb-6 text-slate-800">
               {editingId ? "Edit Note" : "New Note"}
             </h2>
-            
+                         
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
@@ -206,7 +224,6 @@ export default function NotesPage() {
                   placeholder="Note title..."
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Content</label>
                 <textarea 
@@ -218,7 +235,6 @@ export default function NotesPage() {
                   placeholder="Write your thoughts here..."
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Color</label>
                 <div className="flex gap-3">
@@ -233,7 +249,6 @@ export default function NotesPage() {
                   ))}
                 </div>
               </div>
-
               <div className="flex gap-3 mt-8">
                 <button 
                   type="button"
